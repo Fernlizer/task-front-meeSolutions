@@ -42,23 +42,19 @@ Taski Frontend
 1. ดาวน์โหลดโปรเจกต์
 Clone โปรเจกต์จาก GitHub:
 
-bash
-Copy code
-git clone https://github.com/your-repo/taski-frontend.git
-เปลี่ยน Directory ไปยังโฟลเดอร์โปรเจกต์:
 
-bash
-Copy code
+git clone https://github.com/Fernlizer/task-front-meeSolutions
+
+
 cd taski-frontend
 2. ติดตั้ง Dependencies
 ใช้คำสั่ง:
-bash
-Copy code
+
 npm install
 3. ตั้งค่า API URL
 สร้างไฟล์ .env.local ใน root directory:
-plaintext
-Copy code
+
+
 NEXT_PUBLIC_API_URL=http://127.0.0.1:4000
 4. รันโปรเจกต์
 ใช้คำสั่ง:
@@ -68,8 +64,7 @@ Copy code
 npm run dev
 เปิดเว็บเบราว์เซอร์ที่ URL:
 
-arduino
-Copy code
+
 http://localhost:3000
 การใช้งาน
 สร้าง Task:
