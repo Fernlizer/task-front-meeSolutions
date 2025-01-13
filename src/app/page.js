@@ -113,6 +113,52 @@ export default function Home() {
     }
   };
 
+  const handleEditTask = async (task) => {
+    const { value: formValues } = await Swal.fire({
+      title: "Edit Task",
+      html: `
+        <input type="text" id="title" class="swal2-input" placeholder="Task title" value="${task.title}" required>
+        <input type="text" id="description" class="swal2-input" placeholder="Task description" value="${task.description}">
+        <input type="datetime-local" id="dueDate" class="swal2-input" value="${new Date(task.dueDate).toISOString().slice(0, -8)}" required>
+      `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      preConfirm: () => {
+        const title = Swal.getPopup().querySelector("#title").value.trim();
+        const description = Swal.getPopup().querySelector("#description").value.trim();
+        const dueDateInput = Swal.getPopup().querySelector("#dueDate").value;
+  
+        if (!title || !dueDateInput) {
+          Swal.showValidationMessage("All fields are required.");
+          return null;
+        }
+  
+        return { title, description, dueDate: dueDateInput };
+      },
+    });
+  
+    if (!formValues) return;
+  
+    try {
+      const updatedTask = {
+        ...task,
+        title: formValues.title,
+        description: formValues.description,
+        dueDate: new Date(formValues.dueDate).toISOString(),
+      };
+  
+      await axios.patch(`http://127.0.0.1:4000/tasks/${task.id}`, updatedTask);
+      setTasks((prevTasks) =>
+        prevTasks.map((t) => (t.id === task.id ? updatedTask : t))
+      );
+      Swal.fire("Success", "Task updated successfully!", "success");
+    } catch (error) {
+      Swal.fire("Error", "Failed to update task.", "error");
+    }
+  };
+  
+
   const incompleteTasks = filteredTasks.filter((task) => task.status === "Pending");
   const completedTasks = filteredTasks.filter((task) => task.status === "Completed");
 
@@ -186,6 +232,7 @@ export default function Home() {
                   />
                   <FaEdit
                     className="text-blue-500 cursor-pointer hover:text-blue-700"
+                    onClick={() => handleEditTask(task)}
                     title="Edit Task"
                   />
                   <FaTrash
